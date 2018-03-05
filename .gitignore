@@ -9,3 +9,12 @@ tmp
 *.iml
 *.log
 *.swp
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+.byebug_history
