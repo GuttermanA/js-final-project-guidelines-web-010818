@@ -20,12 +20,14 @@ process() {
       rowNum++;
       currentRowRemainder = 12;
       displayObject[`row${rowNum}`].push(splitPhrase[i]);
+      currentRowRemainder -= splitPhrase[i].length;
     }
   }
   for(let k in displayObject) {
-    displayObject[k] = displayObject[k].join("").split("");
+    displayObject[k] = displayObject[k].join("").toUpperCase().split("");
   }
   console.log(displayObject);
+  this.displayObject = displayObject
   return displayObject;
 }
 
