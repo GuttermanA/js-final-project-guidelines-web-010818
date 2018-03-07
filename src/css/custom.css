@@ -2,3 +2,19 @@
   height: 5rem;
   width: 5rem;
 }
+
+.disabled-div {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+#game-board-container {
+  padding: 0.5em 0.5em;
+  border: 1px solid black;
+}
+
+#category-letters-jumbotron {
+  padding: 0.5em 0.5em;
+  background-color: #e6f3ff;
+  border: 1px solid black;
+}

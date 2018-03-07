@@ -8,41 +8,118 @@
   </head>
   <body>
 
-  <div class="container" id="game-board">
-    <div class="row" id="row1"></div>
-    <div class="row" id="row2"></div>
-    <div class="row" id="row3"></div>
-    <div class="row" id="row4"></div>
-  </div>
+    <ul class="nav justify-content-center bg-warning">
+      <li class="nav-item">
+        <p class="nav-link">Current User:</p>
+      </li>
+      <li class="nav-item">
+        <p class="nav-link"><strong>Winnings:</strong></a>
+      </li>
+      <li class="nav-item">
+        <p class="nav-link lead"><strong>BOX OF FORTUNE</strong></p>
+      </li>
+      <li class="nav-item">
+        <p class="nav-link"><strong>Spins Left:</strong></p>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="play-again" href="#">Restart</a>
+      </li>
+    </ul>
 
-  <div class="container col-lg" >
-    <div class="jumbotron jumbotron-fluid">
+    <div class="container" id="game-board-container">
+      <div class="container" id="game-board">
+        <div class="row" id="row1"></div>
+        <div class="row" id="row2"></div>
+        <div class="row" id="row3"></div>
+        <div class="row" id="row4"></div>
+      </div>
+    </div>
+
     <div class="container">
-      <h4 class="display-8" id="letter-container">Chosen Letters:</h4>
-      <h4 class="display-8" id="letter-container"></h4>
+      <div class="jumbotron" id="category-letters-jumbotron">
+        <h4 class="display-8 text-center" id="letter-container">Category: <span id="current-category"></span></h4>
+        <h4 class="display-8" id="letter-container">Chosen Letters: <span id="chosen-letters"></span></h4>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="container col-lg-6" id="wheel-container">
+
+      </div>
+
+      <div class="container col-lg-6" id="button-container" disabled>
+        <div class="row" id="key-row1"></div>
+        <div class="row" id="key-row2"></div>
+        <div class="row" id="key-row3"></div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="container col-lg-6" id="wheel-container">
+    <form class="form-inline" action="#" id="solve-form" style="display: none;">
+      <div class="form-group">
+        <label for="solve">Solve:</label>
+        <input type="text" class="form-control" id="solve-input">
+        <button type="submit" class="btn btn-default" id="solve-submit">Submit</button>
+      </div>
+    </form>
 
+    <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="buy-a-vowel">Buy a Vowel</button>
+    <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="solve">Solve</button>
+
+      <!-- Modal -->
+    <div id="start-game" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Welcome to Box of Fortune</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-inline" action="#" id="modal-form">
+              <div class="form-group">
+                <label for="solve">Please Enter Your Name:</label>
+                <input type="text" class="form-control" id="name">
+                <button type="submit" class="btn btn-default" id="name-submit">Submit</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="container col-lg-6" id="button-container">
-      <div class="row" id="key-row1"></div>
-      <div class="row" id="key-row2"></div>
-      <div class="row" id="key-row3"></div>
+    <!-- Modal -->
+    <div id="end-game" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Game Over </h4>
+            <h4 class="modal-title" id="score-display">Score: </h4>
+          </div>
+          <div class="modal-body">
+            <ol id="score-list">
+            </ol>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="play-again">Play Again</button>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
 
 
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="src/wheel.js"></script>
-  <script src="src/phrase.js"></script>
-  <script src="src/app.js"></script>
-  <script src="src/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="src/player.js"></script>
+    <script src="src/wheel.js"></script>
+    <script src="src/phrase.js"></script>
+    <script src="src/app.js"></script>
+    <script src="src/index.js"></script>
   </body>
 </html>
