@@ -61,6 +61,8 @@ class App {
     this.wheelContainer.addEventListener("click", () => {
       this.generateWheel(this.wheel.randomSelect());
       this.player.spinCounter += 1
+      this.buttonContainer.classList.remove('disabled-div')
+      this.wheelContainer.classList.add('disabled-wheel')
     })
   }
 
@@ -111,21 +113,26 @@ class App {
       this.player.incrementScore(this.wheel.lastResult, foundLetters)
       this.toggleDisplay(this.buyAVowelButton)
       this.toggleDisplay(this.solveButton)
+
     } else {
       this.player.successfulGuesses = 0
       this.toggleDisplay(this.buyAVowelButton, true)
       this.toggleDisplay(this.solveButton, true)
       console.log('failure')
     }
+    this.buttonContainer.classList.add('disabled-div')
     console.log(this.player.spinCounter);
     if (this.player.spinCounter === 20) {
       this.gameOver()
+    } else {
+      this.wheelContainer.classList.remove('disabled-wheel')
     }
+
   }
 
   gameOver() {
     this.postScore()
-    this.document.querySelector('#score-display').innerText + this.player.score
+    document.querySelector('#score-display').innerText + this.player.score
     $("#end-game").modal({
       'backdrop' : 'static'
     })
