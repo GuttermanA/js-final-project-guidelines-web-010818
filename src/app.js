@@ -21,6 +21,13 @@ class App {
     this.keyRowOne = document.querySelector('#key-row1')
     this.keyRowTwo = document.querySelector('#key-row2')
     this.keyRowThree = document.querySelector('#key-row3')
+    this.vowelRow = document.querySelector('#vowel-row')
+    this.vowelContainer = document.querySelector('#vowel-container')
+    this.spins = document.querySelector('#spins')
+    this.currentUser = document.querySelector('#current-user')
+    this.winnings = document.querySelector('#winnings')
+    this.currentCategory = document.querySelector('#current-category')
+    this.wheel = new Wheel()
     //ROWS
     this.rowOne = document.querySelector('#row1')
     this.rowTwo = document.querySelector('#row2')
@@ -29,6 +36,7 @@ class App {
     this.generateBoxes()
     this.generateWheel();
     this.generateLetterButtons(this.consonants)
+    this.generateLetterButtons(this.vowels, true)
     this.addSelectors()
     this.addEventListeners();
     this.renderPhrase = this.renderPhrase.bind(this)
@@ -38,7 +46,7 @@ class App {
   //NOTE: ADD PAGE MANIPULATION
 
   addSelectors() {
-    this.allCardBlocks = document.querySelectorAll('.card-block')
+    this.allCardBlocks = document.querySelectorAll('.card-block h1')
     this.rowOneCardBlock = document.querySelectorAll('.row-1')
     this.rowTwoCardBlock = document.querySelectorAll('.row-2')
     this.rowThreeCardBlock = document.querySelectorAll('.row-3')
@@ -49,11 +57,16 @@ class App {
 
   addEventListeners(){
     this.addSpinWheelEvent()
-    this.addButtonCharButtonEvent()
+    this.addButtonEvents()
     this.addStartGameEvent()
     this.addPlayAgainEvent()
     this.solveButton.addEventListener("click", () => {
       this.solve()
+    })
+    this.buyAVowelButton.addEventListener("click", () =>{
+      this.vowelContainer.classList.remove('disabled-div')
+      this.player.score -= 250
+      this.winnings.innerText = this.player.score
     })
   }
 
@@ -61,8 +74,19 @@ class App {
     this.wheelContainer.addEventListener("click", () => {
       this.generateWheel(this.wheel.randomSelect());
       this.player.spinCounter += 1
-      this.buttonContainer.classList.remove('disabled-div')
-      this.wheelContainer.classList.add('disabled-wheel')
+      this.spins.innerText = 20 - this.player.spinCounter
+      if (this.wheel.lastResult === "BANKRUPTCY" || this.wheel.lastResult === "Lose a Spin") {
+        if (this.player.spinCounter === 20) {
+          this.gameOver()
+        } else {
+          this.player.wheelEffect(this.wheel.lastResult)
+          this.toggleDisplay(this.buyAVowelButton, true)
+          this.toggleDisplay(this.solveButton, true)
+        }
+      } else {
+        this.buttonContainer.classList.remove('disabled-div')
+        this.wheelContainer.classList.add('disabled-wheel')
+      }
     })
   }
 
@@ -84,7 +108,6 @@ class App {
   }
 
   addPlayAgainEvent() {
-    console.log(this.playAgainButtons);
     for(let button of this.playAgainButtons) {
       button.addEventListener("click", () =>{
         window.location.reload()
@@ -92,12 +115,23 @@ class App {
     }
   }
 
-  addButtonCharButtonEvent() {
+  addButtonEvents() {
     this.buttonContainer.addEventListener("click", (event) => {
       let button = event.target
       console.log(button.innerText);
       this.checkSelection(button.innerText)
       button.classList.add('disabled')
+    })
+    this.vowelContainer.addEventListener("click", (event) => {
+      if (this.player.score < 250) {
+        alert('Not enough money to buy a vowel.')
+      } else {
+        let button = event.target
+        console.log(button.innerText);
+        this.checkSelection(button.innerText)
+        button.classList.add('disabled')
+        this.vowelContainer.classList.add('disabled-div')
+      }
     })
   }
 
@@ -106,28 +140,36 @@ class App {
       this.pickedLetters.push(eventTarget)
       this.updateChosenLetters()
     }
-    let foundLetters = this.matchSelection(eventTarget)
-    if (foundLetters) {
+    if (this.vowels.includes(eventTarget)) {
+      this.player.boughtAvowel = true
+    } else {
+      this.player.boughtAvowel = false
+    }
+    let nLetters = this.matchSelection(eventTarget)
+    if (nLetters) {
       console.log('success');
       this.player.successfulGuesses += 1
-      this.player.incrementScore(this.wheel.lastResult, foundLetters)
+      this.player.wheelEffect(this.wheel.lastResult, nLetters)
       this.toggleDisplay(this.buyAVowelButton)
       this.toggleDisplay(this.solveButton)
 
     } else {
-      this.player.successfulGuesses = 0
-      this.toggleDisplay(this.buyAVowelButton, true)
-      this.toggleDisplay(this.solveButton, true)
-      console.log('failure')
+      this.failedGuess()
     }
     this.buttonContainer.classList.add('disabled-div')
-    console.log(this.player.spinCounter);
     if (this.player.spinCounter === 20) {
       this.gameOver()
     } else {
       this.wheelContainer.classList.remove('disabled-wheel')
     }
+  }
 
+  failedGuess() {
+    this.player.successfulGuesses = 0
+    this.toggleDisplay(this.buyAVowelButton, true)
+    this.toggleDisplay(this.solveButton, true)
+    this.toggleDisplay(this.solveForm, true)
+    console.log('failure')
   }
 
   gameOver() {
@@ -148,21 +190,36 @@ class App {
       let answer = this.solveForm.querySelector('#solve-input').value.toUpperCase()
       if (answer === this.phrase.text) {
         alert("Correct!")
+        this.player.solvePuzzleScorer(this.wheel.lastResult, this.numLettersRemaining())
         this.phrase.solved = true
         this.solvedPhrase()
       } else {
         alert("Incorrect!")
+        this.failedGuess()
       }
 
     })
+  }
+
+  numLettersRemaining() {
+    let cardBlocks = document.querySelectorAll('.card-block')
+    let hidden = []
+    for(let block of cardBlocks){
+      if (block.style.display === "none") {
+        hidden.push(block)
+      }
+    }
+    return hidden.length
   }
 
   solvedPhrase() {
     if (this.remainingChars === 0 || this.phrase.solved) {
       this.fetchPhrase()
       this.generateLetterButtons(this.consonants)
+      this.generateLetterButtons(this.vowels, true)
       this.generateWheel()
       this.addEventListeners()
+      this.chosenLettersHTML.innerText = ""
       this.toggleDisplay(this.solveForm, true)
     }
   }
@@ -179,7 +236,7 @@ class App {
     let found = 0
     for(let block of this.allCardBlocks) {
       if (block.innerText === letter) {
-        this.revealLetter(block.id)
+        this.revealLetter(block.parentElement.id)
         found += 1
       }
     }
@@ -210,10 +267,14 @@ class App {
         let phrase = new Phrase(json)
         this.phrase = phrase
         this.renderPhrase(this.phrase.process())
+        this.currentUser.innerText = this.player.name
+        this.spins.innerText = 20 - this.player.spinCounter
+        this.winnings.innerText = this.player.score
       })
   }
 
   postScore() {
+    console.log(this.player);
     let body = {
       name: this.player.name,
       score: this.player.score
@@ -226,7 +287,7 @@ class App {
       },
       body: JSON.stringify(body)
     }
-    fetch(`http://localhost:3000/score_boards`)
+    fetch(`http://localhost:3000/score_boards`, options)
       .then(res => res.json())
       .then(json => this.generateScoreList(json))
 
@@ -239,44 +300,47 @@ class App {
       if (displayObject[k].length > 0) {
         if (k === this.rowOne.id) {
           for(let i = 0; i < displayObject[k].length; i++){
-            this.rowOneCardBlock[i].innerText = displayObject[k][i]
+            this.rowOneCardBlock[i].innerHTML = `<h1>${displayObject[k][i]}</h1>`
             this.styleBlock(this.rowOneCardBlock[i])
+
           }
         }
         if (k === this.rowTwo.id) {
           for(let i = 0; i < displayObject[k].length; i++){
-            this.rowTwoCardBlock[i].innerText = displayObject[k][i]
+            this.rowTwoCardBlock[i].innerHTML = `<h1>${displayObject[k][i]}</h1>`
+            this.rowTwoCardBlock[i]
             this.styleBlock(this.rowTwoCardBlock[i])
           }
         }
         if (k === this.rowThree.id) {
           for(let i = 0; i < displayObject[k].length; i++){
-            this.rowThreeCardBlock[i].innerText = displayObject[k][i]
+            this.rowThreeCardBlock[i].innerHTML = `<h1>${displayObject[k][i]}</h1>`
             this.styleBlock(this.rowThreeCardBlock[i])
           }
         }
         if (k === this.rowFour.id) {
           for(let i = 0; i < displayObject[k].length; i++){
-            this.rowFourCardBlock[i].innerText = displayObject[k][i]
+            this.rowFourCardBlock[i].innerHTML = `<h1>${displayObject[k][i]}</h1>`
             this.styleBlock(this.rowFourCardBlock[i])
           }
         }
       }
     }
+    this.currentCategory.innerText = this.phrase.categoryName
+    this.addSelectors()
   }
 
   renderScore(score) {
-    let date = new Date(score.created_at).toString()
     return `
-    <li>${score.name} - $${score.score} - ${date}
+    <li>${score.name} - $${score.score}
     `
   }
 
   renderBox() {
     return `
     <div class="col-lg-1 ">
-      <div class="card bg-success empty-box mb-3">
-       <div class="card-block row-${Math.floor(this.boxId/12) + 1}" id="box-${++this.boxId}">
+      <div class="card bg-success empty-box m-1">
+       <div class="card-block row-${Math.floor(this.boxId/12) + 1} text-center h1 strong lead my-auto" id="box-${++this.boxId}">
        </div>
       </div>
     </div>
@@ -290,7 +354,7 @@ class App {
   }
 
   styleBlock(block) {
-    if (block.innerText.match(/^[a-zA-Z]+$/)) {
+    if (block.querySelector('h1').innerText.match(/^[a-zA-Z]+$/)) {
       block.style.display = "none"
       block.parentElement.classList.remove('bg-success')
       block.parentElement.classList.add('card-outline-success')
@@ -303,40 +367,52 @@ class App {
   //GENERATE
 
   generateScoreList(json) {
+    document.querySelector('#score-display').innerText += this.player.score
     for(let score of json) {
       this.scoreList.innerHTML += this.renderScore(score)
     }
   }
 
-  generateLetterButtons(letters) {
-    this.keyRowOne.innerHTML = ""
-    this.keyRowTwo.innerHTML = ""
-    this.keyRowThree.innerHTML = ""
-    for(let i = 0; i < letters.length; i++) {
-      if (i < 7) {
-        this.keyRowOne.innerHTML += this.renderButton(letters[i]);
-      } else if (i >= 7 && i < 14) {
-        this.keyRowTwo.innerHTML += this.renderButton(letters[i]);
-      } else if (i >= 14) {
-        this.keyRowThree.innerHTML += this.renderButton(letters[i]);
+  generateLetterButtons(letters, vowels) {
+    if (vowels) {
+      this.vowelRow.innerHTML = "";
+      for(let i = 0; i < letters.length; i++) {
+        this.vowelRow.innerHTML += this.renderButton(letters[i]);
+        this.vowelRow.classList.add('disabled');
+      }
+    } else {
+      this.keyRowOne.innerHTML = "";
+      this.keyRowTwo.innerHTML = "";
+      this.keyRowThree.innerHTML = "";
+      for(let i = 0; i < letters.length; i++) {
+        if (i < 7) {
+          this.keyRowOne.innerHTML += this.renderButton(letters[i]);
+        } else if (i >= 7 && i < 14) {
+          this.keyRowTwo.innerHTML += this.renderButton(letters[i]);
+        } else if (i >= 14) {
+          this.keyRowThree.innerHTML += this.renderButton(letters[i]);
+        }
       }
     }
+
   }
 
   generateWheel(optional) {
-    this.wheelContainer.innerHTML = ""
-    this.wheel = new Wheel()
-    this.wheelContainer.innerHTML = this.wheel.render(optional)
+    let wheelContent = this.wheelContainer;
+    wheelContent.innerHTML = "";
+    wheelContent.innerHTML = "<img src='https://www.gifanimate.net/wp-content/uploads/gift08.gif'></img>";;
+    setTimeout(()=>{wheelContent.innerHTML = this.wheel.render(optional)}, 1200);
+    // this.wheelContainer.innerHTML = this.wheel.render(optional);
   }
 
   generateBoxes(){
     for (let row of this.gameBoardRows) {
-      row.innerHTML = ""
+      row.innerHTML = "";
       for(let i = 0; i < 12; i++) {
         row.innerHTML += this.renderBox();
       }
     }
-    this.addSelectors()
+    this.addSelectors();
   }
 
 }

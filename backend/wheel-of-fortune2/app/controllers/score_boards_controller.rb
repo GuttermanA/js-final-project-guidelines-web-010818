@@ -1,8 +1,8 @@
 class ScoreBoardsController < ApplicationController
-  def index
-    @scores = ScoreBoard.all
-    render json: @scores
-  end
+  # def index
+  #   @scores = ScoreBoard.all
+  #   render json: @scores
+  # end
 
   def create
     @score = ScoreBoard.create(name: params[:name], score: params[:score])
