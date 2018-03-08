@@ -3,6 +3,19 @@
   width: 5rem;
 }
 
+.bg {
+    /* The image used */
+    background-image: url("resources/imgs/wheel-of-fortune-background_theme.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .disabled-div {
     pointer-events: none;
     opacity: 0.4;

@@ -8,122 +8,129 @@
   </head>
   <body>
 
-    <ul class="nav justify-content-center bg-warning">
-      <li class="nav-item">
-        <p class="nav-link">Current User: <span id="current-user"></span></p>
-      </li>
-      <li class="nav-item">
-        <p class="nav-link"><strong>Winnings: <span id="winnings"></span></strong></a>
-      </li>
-      <li class="nav-item">
-        <p class="nav-link lead"> <h4><strong>BOX OF FORTUNE</strong></h4> </p>
-      </li>
-      <li class="nav-item">
-        <p class="nav-link"><strong>Spins Left: <span id="spins"></span></strong></p>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="play-again" href="#">Restart</a>
-      </li>
-    </ul>
 
-    <div class="container" id="game-board-container">
-      <div class="container" id="game-board">
-        <div class="row" id="row1"></div>
-        <div class="row" id="row2"></div>
-        <div class="row" id="row3"></div>
-        <div class="row" id="row4"></div>
-      </div>
-    </div>
 
-    <div class="container">
-      <div class="jumbotron" id="category-letters-jumbotron">
-        <h4 class="display-8 text-center" id="letter-container">Category: <span id="current-category"></span></h4>
-        <h4 class="display-8" id="letter-container">Chosen Letters: <span id="chosen-letters"></span></h4>
-      </div>
-    </div>
+    <div class="bg">
 
-    <div class="container">
-      <div class="row">
-        <div class="container col-lg-5" id="wheel-container"></div>
+      <ul class="nav justify-content-center bg-warning">
+        <li class="nav-item">
+          <p class="nav-link">Current User: <span id="current-user"></span></p>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link"><strong>Winnings: <span id="winnings"></span></strong></a>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link lead"> <h4><strong>BOX OF FORTUNE</strong></h4> </p>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link"><strong>Spins Left: <span id="spins"></span></strong></p>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="play-again" href="#">Restart</a>
+        </li>
+      </ul>
 
-        <div class="container col-lg-4 disabled-div" id="button-container">
-          <div class="row" id="key-row1"></div>
-          <div class="row" id="key-row2"></div>
-          <div class="row" id="key-row3"></div>
-        </div>
-        <div class="container-fluid col-lg-3 disabled-div" id="vowel-container">
-          <div class="row" id="vowel-row"></div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4">
-          <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="buy-a-vowel">Buy a Vowel</button>
-        </div>
-        <div class="col-lg-4">
-          <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="solve">Solve</button>
-        </div>
-        <div class="col-lg-4">
-          <form class="form-inline" action="#" id="solve-form" style="display: none;">
-            <div class="form-group">
-              <label for="solve">Solve:</label>
-              <input type="text" class="form-control" id="solve-input">
-              <button type="submit" class="btn btn-default" id="solve-submit">Submit</button>
-            </div>
-          </form>
+      <div class="container" id="game-board-container">
+        <div class="container" id="game-board">
+          <div class="row" id="row1"></div>
+          <div class="row" id="row2"></div>
+          <div class="row" id="row3"></div>
+          <div class="row" id="row4"></div>
         </div>
       </div>
-    </div>
 
+      <div class="container">
+        <div class="jumbotron" id="category-letters-jumbotron">
+          <h4 class="display-8 text-center" id="letter-container">Category: <span id="current-category"></span></h4>
+          <h4 class="display-8" id="letter-container">Chosen Letters: <span id="chosen-letters"></span></h4>
+        </div>
+      </div>
 
-      <!-- Modal -->
-    <div id="start-game" class="modal fade" role="dialog">
-      <div class="modal-dialog">
+      <div class="container">
+        <div class="row">
+          <div class="container col-lg-5" id="wheel-container"></div>
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Welcome to Box of Fortune</h4>
+          <div class="container col-lg-4 disabled-div" id="button-container">
+            <div class="row" id="key-row1"></div>
+            <div class="row" id="key-row2"></div>
+            <div class="row" id="key-row3"></div>
           </div>
-          <div class="modal-body">
-            <form class="form-inline" action="#" id="modal-form">
+          <div class="container-fluid col-lg-3 disabled-div" id="vowel-container">
+            <div class="row" id="vowel-row"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <button type="button" class="btn btn-primary btn-lg" name="button" style="display: none;" id="buy-a-vowel">Buy a Vowel</button>
+          </div>
+          <div class="col-lg-4">
+            <button type="button" class="btn btn-primary btn-lg" name="button" style="display: none;" id="solve">Solve</button>
+          </div>
+          <div class="col-lg-4">
+            <form class="form-inline" action="#" id="solve-form" style="display: none;">
               <div class="form-group">
-                <label for="solve">Please Enter Your Name:</label>
-                <input type="text" class="form-control" id="name">
-                <button type="submit" class="btn btn-default" id="name-submit">Submit</button>
+                <label for="solve">Solve:</label>
+                <input type="text" class="form-control" id="solve-input">
+                <button type="submit" class="btn btn-primary btn-lg" id="solve-submit">Submit</button>
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-          </div>
         </div>
       </div>
-    </div>
-    <!-- Modal -->
-    <div id="end-game" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="row">
-              <h4 class="modal-title col-6">Game Over </h4>
-              <h4 class="modal-title col-6" id="score-display">Score: </h4>
+
+
+        <!-- Modal -->
+      <div id="start-game" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Welcome to Box of Fortune</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-inline" action="#" id="modal-form">
+                <div class="form-group">
+                  <label for="solve">Please Enter Your Name:</label>
+                  <input type="text" class="form-control" id="name">
+                  <button type="submit" class="btn btn-default" id="name-submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
             </div>
           </div>
-          <div class="modal-body">
-            <ol id="score-list">
-            </ol>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn-primary btn-lg" name="button" style="display: none;" id="play-again">Play Again</button>
-          </div>
         </div>
+      </div>
+      <!-- Modal -->
+      <div id="end-game" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="row">
+                <h4 class="modal-title col-6">Game Over </h4>
+                <h4 class="modal-title col-6" id="score-display">Score: </h4>
+              </div>
+            </div>
+            <div class="modal-body">
+              <ol id="score-list">
+              </ol>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn-primary btn-lg" name="button" id="play-again">Play Again</button>
+            </div>
+          </div>
 
+        </div>
       </div>
     </div>
+
+
 
 
 

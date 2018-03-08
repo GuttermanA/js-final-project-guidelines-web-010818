@@ -62,11 +62,13 @@ class App {
     this.addPlayAgainEvent()
     this.solveButton.addEventListener("click", () => {
       this.solve()
+      this.solveButton.classList.add('disabled')
     })
     this.buyAVowelButton.addEventListener("click", () =>{
       this.vowelContainer.classList.remove('disabled-div')
       this.player.score -= 250
       this.winnings.innerText = this.player.score
+      this.buyAVowelButton.classList.add('disabled')
     })
   }
 
@@ -131,6 +133,8 @@ class App {
         this.checkSelection(button.innerText)
         button.classList.add('disabled')
         this.vowelContainer.classList.add('disabled-div')
+
+
       }
     })
   }
@@ -152,7 +156,8 @@ class App {
       this.player.wheelEffect(this.wheel.lastResult, nLetters)
       this.toggleDisplay(this.buyAVowelButton)
       this.toggleDisplay(this.solveButton)
-
+      this.buyAVowelButton.classList.remove('disabled')
+      this.solveButton.classList.remove('disabled')
     } else {
       this.failedGuess()
     }
@@ -355,9 +360,10 @@ class App {
 
   styleBlock(block) {
     if (block.querySelector('h1').innerText.match(/^[a-zA-Z]+$/)) {
-      block.style.display = "none"
-      block.parentElement.classList.remove('bg-success')
-      block.parentElement.classList.add('card-outline-success')
+
+        block.style.display = "none"
+        block.parentElement.classList.remove('bg-success')
+        block.parentElement.classList.add('card-outline-success')
     } else if (block.innerText !== "") {
       block.parentElement.classList.remove('bg-success')
       block.parentElement.classList.add('card-outline-success')
